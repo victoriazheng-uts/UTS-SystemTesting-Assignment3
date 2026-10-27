@@ -61,5 +61,10 @@ def browser(request):
     try:
         yield driver
     finally:
-        screenshot(driver, request.node.name)
-        driver.quit()
+        try:
+            if driver.window_handles:
+                screenshot(driver, request.node.name)
+        except Exception as e:
+            print(f"Screenshot skipped: {e}")
+        finally:
+            driver.quit()
